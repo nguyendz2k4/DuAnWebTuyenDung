@@ -10,6 +10,8 @@ import { FaChevronDown, FaCheck } from "react-icons/fa6";
 import logo1 from "../../../assets/imgs/logo_cty/conca.jpg";
 import "./style.scss";
 import Pagination from "./Pagination";
+import { Link } from "react-router-dom";
+
 
 const HomePage = () => {
     const [selected, setSelected] = useState("Ngẫu nhiên");
@@ -269,8 +271,9 @@ const HomePage = () => {
 
                         <div className="job-info">
                             <h3 className="job-title">
-                                <a href="">{job.title}</a>
+                                <Link to={`/job/${job.id}`}>{job.title}</Link>
                             </h3>
+
                             <p className="company-name">{job.company}</p>
 
                             <div className="job-meta">
