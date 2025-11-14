@@ -4,45 +4,69 @@ import Label from "../Label";
 import Select from "../Select";
 import MultiSelect from "../MultiSelect";
 
-export default function SelectInputs() {
+export default function SelectInputs({ onChange }) {
+  const [selectedData, setSelectedData] = useState({
+    workType: "",
+    education: "",
+    positions: [],
+  });
+
   const options = [
-    { value: "marketing", label: "Marketing" },
-    { value: "template", label: "Template" },
-    { value: "development", label: "Development" },
+    { value: "Full time", label: "Full time" },
+    { value: "Part time", label: "Part time" },
+    { value: "4-6 tiếng", label: "4-6 tiếng" },
   ];
-  const handleSelectChange = (value: string) => {
-    console.log("Selected value:", value);
-  };
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+
+  const options_education = [
+    { value: "Đại học", label: "Đại học" },
+    { value: "Cao đẳng", label: "Cao đẳng" },
+    { value: "Trung cấp", label: "Trung cấp" },
+    { value: "Khác", label: "Khác" },
+  ];
 
   const multiOptions = [
-    { value: "1", text: "Option 1", selected: false },
-    { value: "2", text: "Option 2", selected: false },
-    { value: "3", text: "Option 3", selected: false },
-    { value: "4", text: "Option 4", selected: false },
-    { value: "5", text: "Option 5", selected: false },
+    { value: "Nhân viên", text: "Nhân viên" },
+    { value: "Trưởng phòng", text: "Trưởng phòng" },
+    { value: "Quản lý", text: "Quản lý" },
+    { value: "Nhân sự", text: "Nhân sự" },
   ];
+
+  const handleChange = (key, value) => {
+    const updated = { ...selectedData, [key]: value };
+    setSelectedData(updated);
+    onChange(updated);
+  };
+
   return (
-    <ComponentCard title="Select Inputs">
+    <ComponentCard title="Thông tin bổ sung">
       <div className="space-y-6">
         <div>
-          <Label>Select Input</Label>
+          <Label>Hình thức làm việc</Label>
           <Select
             options={options}
-            placeholder="Select Option"
-            onChange={handleSelectChange}
-            className="dark:bg-dark-900"
+            placeholder="Chọn hình thức làm việc"
+            onChange={(value) => handleChange("workType", value)}
           />
         </div>
+
+        <div>
+          <Label>Yêu cầu học vấn</Label>
+          <Select
+            options={options_education}
+            placeholder="Chọn học vấn"
+            onChange={(value) => handleChange("education", value)}
+          />
+        </div>
+
         <div>
           <MultiSelect
-            label="Multiple Select Options"
+            label="Cấp bậc"
+            className="position"
             options={multiOptions}
-            defaultSelected={["1", "3"]}
-            onChange={(values) => setSelectedValues(values)}
+            onChange={(values) => handleChange("positions", values)}
           />
-          <p className="sr-only">
-            Selected Values: {selectedValues.join(", ")}
+          <p className="text-sm text-gray-500 mt-1">
+            {selectedData.positions.join(", ") || "Chưa chọn cấp bậc nào"}
           </p>
         </div>
       </div>
