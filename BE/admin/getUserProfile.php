@@ -1,5 +1,4 @@
 <?php
-// Thêm CORS headers
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -11,18 +10,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 include '../database/db_connect.php';
-$response = ['success' => false, 'message' => 'Lỗi không xác định'];
+
+$response = ['success' => false];
 
 try {
-    // 1. Lấy ID từ URL (ví dụ: ?id=1)
-    if (!isset($_GET['id']) || empty($_GET['id'])) {
-        throw new Exception('Không cung cấp ID người dùng');
+    if (!isset($_GET['id'])) {
+        throw new Exception("Thiếu user_id");
     }
 
-    $userId = (int)$_GET['id'];
+    $userId = intval($_GET['id']);
 
-    // 2. Truy vấn CSDL (Dùng các cột bạn đã cung cấp trong ảnh)
-    $sql = "SELECT user_id, username, email, role, status, created_at FROM users WHERE user_id = ? LIMIT 1";
+    // JOIN users + user_profiles
+    $sql = "
+        SELECT 
+            u.user_id, u.username, u.email, u.role, u.status, u.created_at,
+            p.full_name, p.phone, p.address, p.bio
+        FROM users u
+        LEFT JOIN user_profiles p ON u.user_id = p.user_id
+        WHERE u.user_id = ?
+        LIMIT 1
+    ";
+
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -34,13 +42,11 @@ try {
             'user' => $user
         ];
     } else {
-        throw new Exception('Không tìm thấy người dùng');
+        throw new Exception("Không tìm thấy người dùng");
     }
 } catch (Exception $e) {
-    http_response_code(400);
     $response = ['success' => false, 'message' => $e->getMessage()];
 }
 
 echo json_encode($response);
-
 $conn->close();

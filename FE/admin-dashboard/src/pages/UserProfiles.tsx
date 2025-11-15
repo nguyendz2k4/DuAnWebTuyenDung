@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react"; // <-- THÊM
+import { useState, useEffect } from "react";
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import UserMetaCard from "../components/UserProfile/UserMetaCard";
 import UserInfoCard from "../components/UserProfile/UserInfoCard";
 import UserAddressCard from "../components/UserProfile/UserAddressCard";
 import PageMeta from "../components/common/PageMeta";
 
-// Định nghĩa kiểu dữ liệu cho user (dựa trên ảnh CSDL của bạn)
+// Định nghĩa kiểu dữ liệu cho user
 type UserData = {
   user_id: number;
   username: string;
@@ -16,37 +16,43 @@ type UserData = {
 };
 
 export default function UserProfiles() {
-  // --- THÊM LOGIC LẤY DỮ LIỆU ---
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Hàm để lấy dữ liệu
     const fetchUserProfile = async () => {
       try {
-        // 1. Lấy userId từ localStorage (đã lưu khi đăng nhập)
+        // 1. Lấy userId từ localStorage
         const userId = localStorage.getItem("userId");
+
+        console.log("userId từ localStorage:", userId);
+
         if (!userId) {
           throw new Error("Không tìm thấy userId. Vui lòng đăng nhập lại.");
         }
 
-        // 2. Gọi API (đảm bảo URL này đúng)
-        const res = await fetch(`http://localhost/BE/api/getUserProfile.php?id=${userId}`);
+        // 2. Gọi API - KIỂM TRA URL NÀY CÓ ĐÚNG KHÔNG
+        const apiUrl = `http://localhost/DuAnWebTuyenDung/BE/admin/getUserProfile.php?id=${userId}`;
+        console.log("Đang gọi API:", apiUrl);
+
+        const res = await fetch(apiUrl);
 
         if (!res.ok) {
-          throw new Error("Lỗi khi kết nối mạng");
+          throw new Error(`HTTP error! status: ${res.status}`);
         }
 
         const data = await res.json();
+        console.log("Response data:", data);
 
         // 3. Cập nhật state
         if (data.success) {
           setUser(data.user);
         } else {
-          throw new Error(data.message);
+          throw new Error(data.message || "Không thể lấy thông tin user");
         }
       } catch (err: any) {
+        console.error("Lỗi khi lấy profile:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -54,31 +60,45 @@ export default function UserProfiles() {
     };
 
     fetchUserProfile();
-  }, []); // Mảng rỗng [] nghĩa là chạy 1 lần khi component được tải
-  // --- KẾT THÚC LOGIC LẤY DỮ LIỆU ---
-
+  }, []);
 
   // --- XỬ LÝ GIAO DIỆN KHI ĐANG TẢI HOẶC LỖI ---
   if (loading) {
     return (
-      <div className="p-6">
-        <h3 className="text-lg font-semibold">Đang tải hồ sơ...</h3>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <h3 className="text-lg font-semibold">Đang tải hồ sơ...</h3>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6">
-        <h3 className="text-lg font-semibold text-red-500">Lỗi: {error}</h3>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
+          <h3 className="text-lg font-semibold text-red-700 mb-2">⚠️ Lỗi</h3>
+          <p className="text-red-600">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Thử lại
+          </button>
+        </div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="p-6">
-        <h3 className="text-lg font-semibold text-red-500">Không tìm thấy dữ liệu người dùng.</h3>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h3 className="text-lg font-semibold text-red-500">
+            Không tìm thấy dữ liệu người dùng.
+          </h3>
+        </div>
       </div>
     );
   }
@@ -96,17 +116,9 @@ export default function UserProfiles() {
           Hồ sơ của: {user.username}
         </h3>
         <div className="space-y-6">
-          {/* THÊM props "user" vào đây */}
           <UserMetaCard user={user} />
-          <UserInfoCard user={user} />
-
-          {/* LƯU Ý: Bảng 'users' của bạn không có thông tin địa chỉ.
-            Component <UserAddressCard /> này sẽ không có gì để hiển thị
-            trừ khi bạn thêm cột (address, city, v.v.) vào CSDL.
-            Tôi vẫn để nó ở đây, và bạn có thể truyền "user" vào
-            hoặc tạm thời ẩn nó đi.
-          */}
-          <UserAddressCard user={user} />
+          <UserInfoCard />
+          <UserAddressCard />
         </div>
       </div>
     </>

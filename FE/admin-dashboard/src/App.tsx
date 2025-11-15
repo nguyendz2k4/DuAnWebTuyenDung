@@ -23,42 +23,42 @@ import Home from "./pages/Dashboard/Home";
 
 export default function App() {
   return (
-    <>
-      <Router>
-        <ScrollToTop />
-        <Routes>
-          {/* Auth Layout - Public routes */}
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+    <Router>
+      <ScrollToTop />
 
-          {/* Dashboard Layout - Protected routes */}
-          <Route
-            element={
-              <PrivateRoute allowedRoles={['admin', 'employer']}>
-                <AppLayout />
-              </PrivateRoute>
-            }
-          >
-            <Route index path="/" element={<Home />} />
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/blank" element={<Blank />} />
-            <Route path="/form-elements" element={<FormElements />} />
-            <Route path="/basic-tables" element={<BasicTables />} />
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/avatars" element={<Avatars />} />
-            <Route path="/badge" element={<Badges />} />
-            <Route path="/buttons" element={<Buttons />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/videos" element={<Videos />} />
-            <Route path="/line-chart" element={<LineChart />} />
-            <Route path="/bar-chart" element={<BarChart />} />
-          </Route>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
 
-          {/* Fallback Route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </>
+        {/* Protected + Layout */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoute allowedRoles={["admin", "employer"]}>
+              <AppLayout />   {/* Layout phải có <Outlet /> */}
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<Home />} />
+          <Route path="profile" element={<UserProfiles />} />
+          <Route path="calendar" element={<Calendar />} />
+          <Route path="blank" element={<Blank />} />
+          <Route path="form-elements" element={<FormElements />} />
+          <Route path="basic-tables" element={<BasicTables />} />
+          <Route path="alerts" element={<Alerts />} />
+          <Route path="avatars" element={<Avatars />} />
+          <Route path="badge" element={<Badges />} />
+          <Route path="buttons" element={<Buttons />} />
+          <Route path="images" element={<Images />} />
+          <Route path="videos" element={<Videos />} />
+          <Route path="line-chart" element={<LineChart />} />
+          <Route path="bar-chart" element={<BarChart />} />
+        </Route>
+
+        {/* Other */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
