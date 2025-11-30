@@ -16,10 +16,12 @@ import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
 import BasicTables from "./pages/Tables/BasicTables";
 import FormElements from "./pages/Forms/FormElements";
+import UserManagement from "./pages/Forms/UserManagement";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
+import AddAccounts from "./pages/Forms/AddAccounts";
 
 export default function App() {
   return (
@@ -36,15 +38,17 @@ export default function App() {
           path="/"
           element={
             <PrivateRoute allowedRoles={["admin", "employer"]}>
-              <AppLayout />   {/* Layout phải có <Outlet /> */}
+              <AppLayout />
             </PrivateRoute>
           }
         >
           <Route index element={<Home />} />
           <Route path="profile" element={<UserProfiles />} />
+          <Route path="AddAccounts" element={<AddAccounts />} />
           <Route path="calendar" element={<Calendar />} />
           <Route path="blank" element={<Blank />} />
           <Route path="form-elements" element={<FormElements />} />
+          <Route path="UserManagement" element={<UserManagement />} />
           <Route path="basic-tables" element={<BasicTables />} />
           <Route path="alerts" element={<Alerts />} />
           <Route path="avatars" element={<Avatars />} />

@@ -1,20 +1,22 @@
 .job-section {
-    max-width: 1200px;
-    padding: 20px 0;
-    margin: 0 40px;
+    width: 100%;
+    max-width: 100%;
+    padding: 20px 80px 20px 20px;
+    margin: 0;
+    box-sizing: border-box;
 
     .box-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
 
         .box-header-left {
             display: flex;
             align-items: center;
 
             .box-header-title {
-                font-size: 24px;
+                font-size: 20px;
                 font-weight: 600;
                 color: #00b14f;
             }
@@ -234,21 +236,23 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 16px;
-        margin-top: 30px;
+        margin-top: 20px;
 
         .job-card {
+            position: relative;
             background: #fff;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
 
             &:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                box-shadow: 0 4px 12px rgba(0, 177, 79, 0.15);
 
                 .job-title a {
                     color: rgb(0, 177, 79);
@@ -260,6 +264,7 @@
                 margin-right: 16px;
                 border-radius: 10px;
                 border: 0.5px solid rgb(197, 197, 197);
+                flex-shrink: 0;
 
                 img {
                     width: 50px;
@@ -271,6 +276,8 @@
 
             .job-info {
                 flex: 1;
+                min-width: 0;
+                // padding-right: 40px;
 
                 .job-title {
                     a {
@@ -279,7 +286,7 @@
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        font-size: 16px;
+                        font-size: 15px;
                         font-weight: 600;
                         margin: 0 0 6px;
                         color: #333;
@@ -308,9 +315,15 @@
                     .location {
                         background: #f0f0f0;
                         padding: 4px 8px;
-                        border-radius: 8px;
-                        font-size: 13px;
+                        border-radius: 10px;
+                        font-size: 12px;
                         color: #555;
+                        font-weight: 500;
+                    }
+
+                    .salary {
+                        color: #00b14f;
+                        background: #e5f7ed;
                     }
                 }
 
@@ -321,17 +334,24 @@
                 border: 1.5px solid #00b14f;
                 color: #00b14f;
                 border-radius: 50%;
-                width: 36px;
-                height: 36px;
+                width: 29px;
+                height: 29px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
                 transition: all 0.2s ease;
 
+                position: absolute;
+                bottom: 12px;
+                right: 12px;
+                z-index: 2;
+                margin: 0;
+
                 &:hover {
                     background: #d1f5e1;
                     color: #fff;
+                    border-color: #00b14f;
                     transform: scale(1.05);
                 }
 
@@ -340,7 +360,7 @@
                 }
 
                 svg {
-                    pointer-events: none; // tránh bug click trúng icon
+                    pointer-events: none;
                 }
             }
 

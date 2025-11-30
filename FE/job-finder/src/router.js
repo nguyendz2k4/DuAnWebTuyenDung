@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { ROUTES } from "./utils/router";
 import HomePage from "./pages/users/homePage";
 import MasterLayout from "./pages/users/theme/masterLayout";
-import DetailJob from "./pages/users/homePage/detailJob"; // 👉 thêm dòng này
+import DetailJob from "./pages/users/homePage/detailJob";
+import FavoriteJobs from "./pages/users/favoriteJobs"; // ← THÊM DÒNG NÀY (nếu có trang này)
 
 const RouterCustom = () => {
     return (
@@ -23,6 +24,16 @@ const RouterCustom = () => {
                 element={
                     <MasterLayout>
                         <DetailJob />
+                    </MasterLayout>
+                }
+            />
+
+            {/* Trang việc làm yêu thích - THÊM ROUTE NÀY */}
+            <Route
+                path="/favorite-jobs"
+                element={
+                    <MasterLayout>
+                        <FavoriteJobs />
                     </MasterLayout>
                 }
             />

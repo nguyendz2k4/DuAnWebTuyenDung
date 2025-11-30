@@ -5,15 +5,17 @@ import {
     IoIosArrowDropright,
 } from "react-icons/io";
 import { IoFilterSharp } from "react-icons/io5";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart } from "react-icons/fa"; 
 import { FaChevronDown, FaCheck } from "react-icons/fa6";
 import logo1 from "../../../assets/imgs/logo_cty/conca.jpg";
 import "./style.scss";
 import Pagination from "./Pagination";
+import Slider from "./Slider";
 import { Link } from "react-router-dom";
-
+import { useFavorite } from "../Context/FavoriteContext"; 
 
 const HomePage = () => {
+    const { toggleFavorite, isFavorite } = useFavorite(); 
     const [selected, setSelected] = useState("Ngẫu nhiên");
     const [filterType, setFilterType] = useState("Địa điểm");
     const scrollRef = useRef();
@@ -150,7 +152,7 @@ const HomePage = () => {
             name: "CÔNG TY CỔ PHẦN TẬP ĐOÀN KAROFI",
             industry: "Điện tử / Điện lạnh",
             jobs: 54,
-            logo: "/images/fpt-logo.png", // đường dẫn ảnh logo
+            logo: "/images/fpt-logo.png",
         },
         {
             id: 2,
@@ -170,15 +172,14 @@ const HomePage = () => {
 
     const filterOptions = ["Địa điểm", "Mức lương", "Kinh nghiệm", "Ngành nghề"];
 
-    // Phân trang
     const [page, setPage] = useState(1);
     const jobsPerPage = 12;
     const totalPages = Math.ceil(jobs.length / jobsPerPage);
 
-    // Tính các job của trang hiện tại
     const startIndex = (page - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;
     const currentJobs = jobs.slice(startIndex, endIndex);
+    
     const scrollLeft = () => {
         scrollRef.current.scrollBy({ left: -700, behavior: "smooth" });
     };
@@ -212,7 +213,6 @@ const HomePage = () => {
                     <IoFilterSharp className="filter-icon" />
                     <span className="filter-label">Lọc theo:</span>
 
-                    {/* Dropdown */}
                     <div className="filter-dropdown">
                         <button
                             className="filter-btn"
@@ -229,8 +229,7 @@ const HomePage = () => {
                                 {filterOptions.map((option) => (
                                     <div
                                         key={option}
-                                        className={`dropdown-item ${filterType === option ? "active" : ""
-                                            }`}
+                                        className={`dropdown-item ${filterType === option ? "active" : ""}`}
                                         onClick={() => {
                                             setFilterType(option);
                                             setOpenDropdown(false);
@@ -247,7 +246,6 @@ const HomePage = () => {
                     </div>
                 </div>
 
-                {/* Các vùng */}
                 <div className="filter-tags">
                     <IoIosArrowDropleft className="icon-left" size={32} color="#00b14f" />
                     {locations.map((loc) => (
@@ -262,30 +260,47 @@ const HomePage = () => {
                     <IoIosArrowDropright className="icon-left1" size={32} color="#00b14f" />
                 </div>
             </div>
+            
             <div className="job-list">
-                {currentJobs.map((job) => (
-                    <div key={job.id} className="job-card">
-                        <div className="job-logo">
-                            <img src={job.logo} alt={job.company} />
-                        </div>
-
-                        <div className="job-info">
-                            <h3 className="job-title">
-                                <Link to={`/job/${job.id}`}>{job.title}</Link>
-                            </h3>
-
-                            <p className="company-name">{job.company}</p>
-
-                            <div className="job-meta">
-                                <span className="salary">{job.salary}</span>
-                                <span className="location">{job.location}</span>
+                {currentJobs.map((job) => {
+                    if (!job || !job.id) return null;
+                    const isJobFavorite = isFavorite(job.id);
+                    
+                    return (
+                        <div key={job.id} className="job-card">
+                            <div className="job-logo">
+                                <img src={job.logo} alt={job.company} />
                             </div>
+
+                            <div className="job-info">
+                                <h3 className="job-title">
+                                    <Link to={`/job/${job.id}`}>{job.title}</Link>
+                                </h3>
+
+                                <p className="company-name">{job.company}</p>
+
+                                <div className="job-meta">
+                                    <span className="salary">{job.salary}</span>
+                                    <span className="location">{job.location}</span>
+                                </div>
+                            </div>
+                            
+                            {/* Nút yêu thích - Đổi icon dựa vào trạng thái */}
+                            <button 
+                                className={`save-icon ${isJobFavorite ? "active" : ""}`}
+                                onClick={() => toggleFavorite(job.id)}
+                            >
+                                {isJobFavorite ? (
+                                    <FaHeart size={20} color="#00b14f" />
+                                ) : (
+                                    <FaRegHeart size={20} />
+                                )}
+                            </button>
                         </div>
-                        <button className="save-icon"> <FaRegHeart size={20} /> </button>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
-            {/* Phân trang */}
+            
             <Pagination
                 currentPage={page}
                 totalPages={totalPages}
@@ -294,7 +309,8 @@ const HomePage = () => {
                 nextIcon={<IoIosArrowDropright />}
                 color="#00b14f"
             />
-            {/* ---- DANH SÁCH CÔNG TY THEO NGÀNH ---- */}
+            <Slider />
+            
             <div className="section-divider">
                 <div className="company-list">
                     <div className="category-container" ref={scrollRef}>
@@ -359,8 +375,6 @@ const HomePage = () => {
                         </article>
                     ))}
                 </div>
-
-
             </div>
         </div >
     );

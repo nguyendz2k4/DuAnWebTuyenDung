@@ -1,10 +1,8 @@
 import { memo, useState, useRef, useEffect } from "react";
-import { FiBell, FiMessageCircle, FiUser } from "react-icons/fi";
-import { BsChevronDown } from "react-icons/bs";
-import { BsChevronUp } from "react-icons/bs";
-import { IoIosSearch } from "react-icons/io";
-import { IoIosList } from "react-icons/io";
-import { FiMapPin } from "react-icons/fi";
+import { FiBell, FiMessageCircle, FiUser, FiMapPin } from "react-icons/fi";
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { IoIosSearch, IoIosList } from "react-icons/io";
+import { Link } from "react-router-dom"; 
 import LocationDropdown from "./LocationDropdown";
 import JoblistDropdown from "./JoblistDropdown";
 import logo from "../../../../assets/imgs/logo/topcv-logo-6.png";
@@ -26,53 +24,89 @@ const Header = () => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+    
     return (
         <header className="header-container">
             <div className="header-top">
                 <div className="header-left">
-                    <img
-                        src={logo}
-                        alt="TopCV Logo"
-                        className="logo"
-                    />
+                    <Link to="/"> 
+                        <img
+                            src={logo}
+                            alt="TopCV Logo"
+                            className="logo"
+                        />
+                    </Link>
                 </div>
-
-                {/* Main nav */}
                 <nav className="header-nav">
-                    <span className="nav-item">Việc làm
-                        <BsChevronDown className="icon-down" />
-                        <BsChevronUp className="icon-up" />
-                    </span>
-                    <span className="nav-item">Tạo CV
-                        <BsChevronDown className="icon-down" />
-                        <BsChevronUp className="icon-up" />
-                    </span>
-                    <span className="nav-item">Công cụ
-                        <BsChevronDown className="icon-down" />
-                        <BsChevronUp className="icon-up" />
-                    </span>
-                    <span className="nav-item">Cẩm nang nghề nghiệp
-                        <BsChevronDown className="icon-down" />
-                        <BsChevronUp className="icon-up" />
-                    </span>
+                    <div className="nav-item">
+                        <div className="nav-title">
+                            Việc làm
+                            <BsChevronDown className="icon-down" />
+                            <BsChevronUp className="icon-up" />
+                        </div>
+
+                        <div className="dropdown-menu">
+                            <a href="#" className="dropdown-item">Việc làm mới nhất</a>
+                            <Link to="/favorite-jobs" className="dropdown-item">
+                                Việc làm đã lưu
+                            </Link>
+                            <a href="#" className="dropdown-item">Việc làm ứng tuyển</a>
+                        </div>
+                    </div>
+
+                    <div className="nav-item">
+                        <div className="nav-title">
+                            Tạo CV
+                            <BsChevronDown className="icon-down" />
+                            <BsChevronUp className="icon-up" />
+                        </div>
+                        <div className="dropdown-menu">
+                            <a href="#" className="dropdown-item">Mẫu CV đơn giản</a>
+                            <a href="#" className="dropdown-item">Mẫu CV ấn tượng</a>
+                            <a href="#" className="dropdown-item">Mẫu CV chuyên nghiệp</a>
+                        </div>
+                    </div>
+
+                    <div className="nav-item">
+                        <div className="nav-title">
+                            Công cụ
+                            <BsChevronDown className="icon-down" />
+                            <BsChevronUp className="icon-up" />
+                        </div>
+                        <div className="dropdown-menu">
+                            <a href="#" className="dropdown-item">Trắc nghiệm MBTI</a>
+                            <a href="#" className="dropdown-item">Trắc nghiệm MI</a>
+                            <a href="#" className="dropdown-item">Tính lãi suất kép</a>
+                        </div>
+                    </div>
+
+                    <div className="nav-item">
+                        <div className="nav-title">
+                            Cẩm nang nghề nghiệp
+                            <BsChevronDown className="icon-down" />
+                            <BsChevronUp className="icon-up" />
+                        </div>
+                        <div className="dropdown-menu">
+                            <a href="#" className="dropdown-item">Định hướng nghề nghiệp</a>
+                            <a href="#" className="dropdown-item">Bí kíp tìm việc</a>
+                            <a href="#" className="dropdown-item">Kiến thức chuyên ngành</a>
+                            <a href="#" className="dropdown-item">Hành trang nghề nghiệp</a>
+                        </div>
+                    </div>
+
                     <span className="pro">TopCV Pro</span>
                 </nav>
+                
                 {/* Icons */}
                 <div className="header-icons">
                     <button>
-                        <FiBell size={22} style={{
-                            opacity: 0.7,
-                        }} />
+                        <FiBell size={22} style={{ opacity: 0.7 }} />
                     </button>
                     <button>
-                        <FiMessageCircle size={22} style={{
-                            opacity: 0.7,
-                        }} />
+                        <FiMessageCircle size={22} style={{ opacity: 0.7 }} />
                     </button>
                     <button>
-                        <FiUser size={22} style={{
-                            opacity: 0.7,
-                        }} />
+                        <FiUser size={22} style={{ opacity: 0.7 }} />
                     </button>
                 </div>
 
